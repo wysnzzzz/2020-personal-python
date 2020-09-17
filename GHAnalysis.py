@@ -64,10 +64,12 @@ class Data:
         x = open("user_event.json", "r", encoding="utf-8").read()
         data = json.loads(x)
         return data[user][event]
+    
     def get_repo_event(self, repo, event):
         x = open("repo_event.json", "r", encoding="utf-8").read()
         data = json.loads(x)
         return data[repo][event]
+    
     def get_user_repo_event(self,user, repo, event):
         x = open("user_repo_event.json", "r", encoding="utf-8").read()
         data =json.loads(x)
@@ -79,27 +81,25 @@ class Run:
         self.parser = argparse.ArgumentParser()
         self.data = None
         self.argInit()
-        print(self.analyse())
 
     def argInit(self):
         self.parser.add_argument('-i', '--init')
         self.parser.add_argument('-u', '--user')
         self.parser.add_argument('-r', '--repo')
         self.parser.add_argument('-e', '--event')
+        
     def analyse(self):
-        if self.parser.parse_args().init:
-            self.data = Data(self.parser.parse_args().init, 1)
-            return 0
-        else:
-            if self.data is None:
-                self.data = Data()
-            elif self.parser.parse_args().user and self.parser.parse_args().event and not self.parser.parse_args().repo:
-                res = self.data.get_user_event(self.parser.parse_args().user, self.parser.parse_args().event)
-            elif self.parser.parse_args().repo and self.parser.parse_args().event and not self.parser.parse_args().user:
-                res = self.data.get_repo_event(self.parser.parse_args().repo, self.parser.parse_args().event)
-            elif self.parser.parse_args().user and self.parser.parse_args().event and self.parser.parse_args().repo:
-                res = self.data.get_user_repo_event(self.parser.parse_args().user, self.parser.parse_args().repo, self.parser.parse_args().event)
-        return res
+    if self.parser.parse_args().init:
+        self.data = Data(self.parser.parse_args().init, 1)
+    elif args.user and args.event and not args.repo:
+        data = Data()
+        print(data.get_user_event(args.user, args.event))
+    elif args.repo and args.event and not args.user:
+        data = Data()
+        print(data.get_repo_event(args.repo, args.event))
+    elif args.user and args.repo and args.event:
+        data = Data()
+        print(data.get_user_repo_event(args.user, args.repo, args.event))
 
 if __name__ == '__main__':
     a = Run()
