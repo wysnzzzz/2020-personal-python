@@ -89,13 +89,17 @@ class Run:
     def analyse(self):
         if self.parser.parse_args().init:
             self.data = Data(self.parser.parse_args().init, 1)
-        elif self.parser.parse_args().user and self.parser.parse_args().event and not self.parser.parse_args().repo:
-            self.data = Data(self.parser.parse_args().user, self.parser.parse_args().event)
-        elif self.parser.parse_args().repo and self.parser.parse_args().event and not self.parser.parse_args().user:
-            self.data = Data(self.parser.parse_args().repo, self.parser.parse_args().event)
-        elif self.parser.parse_args().user and self.parser.parse_args().event and self.parser.parse_args().repo:
-            self.data = Data(self.parser.parse_args().user, self.parser.parse_args().repo, self.parser.parse_args().event)
-
+            return 0
+        else:
+            if self.data is None:
+                self.data = Data()
+            elif self.parser.parse_args().user and self.parser.parse_args().event and not self.parser.parse_args().repo:
+                res = self.data.get_user_event(self.parser.parse_args().user, self.parser.parse_args().event)
+            elif self.parser.parse_args().repo and self.parser.parse_args().event and not self.parser.parse_args().user:
+                res = self.data.get_repo_event(self.parser.parse_args().repo, self.parser.parse_args().event)
+            elif self.parser.parse_args().user and self.parser.parse_args().event and self.parser.parse_args().repo:
+                res = self.data.get_user_repo_event(self.parser.parse_args().user, self.parser.parse_args().repo, self.parser.parse_args().event)
+        return res
 
 if __name__ == '__main__':
     a = Run()
